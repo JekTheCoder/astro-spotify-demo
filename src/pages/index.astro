@@ -1,16 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Home from "../layouts/Home.astro";
 import GeneralNav from "../components/GeneralNav.astro";
 import LibrariesNav from "../components/LibrariesNav.astro";
 import PlaylistItemCard from "../components/PlaylistItemCard.astro";
+import AppLayout from "../layouts/AppLayout.astro";
 import "../styles/cards.css";
 
 import { playlists } from "@/lib/data";
 ---
 
 <Layout title="Spofity ;)">
-  <Home>
+  <AppLayout>
     <aside slot="aside" class="grid grid-rows-[auto_1fr] gap-2">
       <GeneralNav />
       <LibrariesNav />
@@ -25,12 +25,12 @@ import { playlists } from "@/lib/data";
     </main>
 
     <footer slot="player" class="card-1">kie</footer>
-  </Home>
+  </AppLayout>
 </Layout>
 
 <style>
-	.playlists-list {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-	}
+  .playlists-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
 </style>
