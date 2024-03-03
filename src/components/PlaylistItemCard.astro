@@ -1,33 +1,49 @@
 ---
 import { Image } from "astro:assets";
 import type { Playlist } from "@/lib/data";
+import PlaylistButton from "./PlaylistButton.tsx";
+
 type Props = Playlist;
 
 const { id, title, cover, artists } = Astro.props;
 const joinedArtists = artists.join(", ");
 ---
 
-<a
-  class="playlist-item p-2 grid grid-rows-[auto_5rem] grid-cols-1 gap-3 rounded-md bg-zinc-800 hover:bg-zinc-700 transition-colors"
-  href={`/playlists/${id}`}
+<article
+  class="playlist-item relative transition-colors group"
   transition:name=`playlist-${id}-box`
 >
-  <picture>
-    <Image
-      class="object-cover w-full h-full rounded-md"
-      src={cover}
-      alt={`Cover of ${title} by ${joinedArtists}`}
-      width={154}
-      height={154}
-      loading="eager"
-      transition:name=`playlist-${id}-image`
-    />
-  </picture>
-
-  <div class="truncate">
-    <h4 class="text-md text-white" transition:name=`playlist-${id}-name`>
-      {title}
-    </h4>
-    <span class="text-sm text-gray-400">{joinedArtists}</span>
+  <div class="absolute top-0 right-0 w-full m-4">
+    <div class="w-full aspect-square relative">
+      <div
+        class="absolute bottom-2 right-2 z-50 opacity-0 group-hover:opacity-100 group-hover:-translate-y-1 transition-[opacity,transform]"
+      >
+        <PlaylistButton client:load playlistId={id} />
+      </div>
+    </div>
   </div>
-</a>
+
+  <a
+    class="p-4 grid grid-rows-[auto_5rem] grid-cols-1 gap-3 rounded-md bg-zinc-800 hover:bg-zinc-700 z-20"
+    href={`/playlists/${id}`}
+  >
+    <picture class="relative">
+      <Image
+        class="object-cover w-full h-full rounded-md"
+        src={cover}
+        alt={`Cover of ${title} by ${joinedArtists}`}
+        width={154}
+        height={154}
+        loading="eager"
+        transition:name=`playlist-${id}-image`
+      />
+    </picture>
+
+    <div class="truncate">
+      <h4 class="text-md text-white" transition:name=`playlist-${id}-name`>
+        {title}
+      </h4>
+      <span class="text-sm text-gray-400">{joinedArtists}</span>
+    </div>
+  </a>
+</article>

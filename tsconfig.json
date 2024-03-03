@@ -6,12 +6,22 @@
         "name": "@astrojs/ts-plugin"
       }
     ],
-    "baseUrl": ".",
+    "baseUrl": "/home/jeshua/projects/astro/astro-spotify-demo",
     "paths": {
-      "@/*": ["src/*"],
-      "@/components/*": ["src/components/*"],
-      "@/icons/*": ["src/components/icons/*"],
-      "@/lib/*": ["src/lib/*"]
-    }
+      "@/*": [
+        "src/*"
+      ],
+      "@/components/*": [
+        "src/components/*"
+      ],
+      "@/icons/*": [
+        "src/components/icons/*"
+      ],
+      "@/lib/*": [
+        "src/lib/*"
+      ]
+    },
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
   }
 }
