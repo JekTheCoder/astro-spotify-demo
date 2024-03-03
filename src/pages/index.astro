@@ -1,13 +1,18 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Home from "../layouts/Home.astro";
+import GeneralNav from "../components/GeneralNav.astro";
+import LibrariesNav from "../components/LibrariesNav.astro";
+import "../styles/cards.css";
 ---
 
 <Layout title="Spofity ;)">
   <Home>
-		<aside slot="aside">a</aside>
-    <main slot="main">2</main>
-		<footer slot="player">kie</footer>
+    <aside slot="aside" class="grid grid-rows-[auto_1fr] gap-2">
+      <GeneralNav />
+			<LibrariesNav />
+    </aside>
+    <main slot="main" class="card-1">2</main>
+    <footer slot="player" class="card-1">kie</footer>
   </Home>
 </Layout>
-
