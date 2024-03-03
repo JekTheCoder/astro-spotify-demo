@@ -11,7 +11,7 @@
       "@/*": ["src/*"],
       "@/components/*": ["src/components/*"],
       "@/icons/*": ["src/components/icons/*"],
-      "@lib/*": ["src/lib/*"]
+      "@/lib/*": ["src/lib/*"]
     }
   }
 }

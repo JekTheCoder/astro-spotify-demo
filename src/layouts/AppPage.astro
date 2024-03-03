@@ -1,0 +1,19 @@
+---
+import AppLayout from "./AppLayout.astro";
+import Layout from "./Layout.astro";
+import GeneralNav from "@/components/GeneralNav.astro";
+import LibrariesNav from "@/components/LibrariesNav.astro";
+---
+
+<Layout title="Spofity ;)">
+  <AppLayout>
+    <aside slot="aside" class="grid grid-rows-[auto_1fr] gap-2">
+      <GeneralNav />
+      <LibrariesNav />
+    </aside>
+
+		<slot slot="main" />
+
+    <footer slot="player" class="card-1">kie</footer>
+  </AppLayout>
+</Layout>

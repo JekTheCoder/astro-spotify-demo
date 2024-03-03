@@ -1,62 +1,49 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import GeneralNav from "../components/GeneralNav.astro";
-import LibrariesNav from "../components/LibrariesNav.astro";
 import PlaylistItemCard from "../components/PlaylistItemCard.astro";
-import AppLayout from "../layouts/AppLayout.astro";
 import "../styles/cards.scss";
 import { Image } from "astro:assets";
+import AppPage from "../layouts/AppPage.astro";
 
 import { playlists } from "@/lib/data";
 ---
 
-<Layout title="Spofity ;)">
-  <AppLayout>
-    <aside slot="aside" class="grid grid-rows-[auto_1fr] gap-2">
-      <GeneralNav />
-      <LibrariesNav />
-    </aside>
+<AppPage>
+  <main
+    class="card-1 pb-10 overflow-y-auto relative transition-all duration-1000"
+  >
+    <header class="relative z-10 px-6 bg-green-600">
+      <nav class="py-4">Navigation!</nav>
 
-    <main
-      slot="main"
-      class="card-1 pb-10 overflow-y-auto relative transition-all duration-1000"
-    >
-      <header class="relative z-10 px-6 bg-green-600">
-        <nav class="py-4">Navigation!</nav>
+      <div
+        class="absolute z-10 inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/80"
+      >
+      </div>
 
-        <div
-          class="absolute z-10 inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/80"
-        >
-        </div>
+      <picture class="relative z-20">
+        <Image
+          class="w-full h-full object-cover rounded-md object-top max-h-80"
+          src="http://vinyl.lofirecords.com/cdn/shop/files/LofiLyon_Day_1_517f0be5-0197-4030-9f18-0ac245cef7d1.png?v=1708540042"
+          alt="LofiLyon Day 1"
+          width={526}
+          height={296}
+          loading="eager"
+        />
+      </picture>
+    </header>
 
-        <picture class="relative z-20">
-          <Image
-            class="w-full h-full object-cover rounded-md object-top max-h-80"
-            src="http://vinyl.lofirecords.com/cdn/shop/files/LofiLyon_Day_1_517f0be5-0197-4030-9f18-0ac245cef7d1.png?v=1708540042"
-            alt="LofiLyon Day 1"
-						width={526}
-						height={296}
-						loading="eager"
-          />
-        </picture>
-      </header>
+    <section>
+      <div class="py-4"></div>
+    </section>
 
-      <section>
-        <div class="py-4"></div>
-      </section>
+    <section class="px-4">
+      <h2 class="text-3xl font-bold mb-4">Yur welcom</h2>
 
-      <section class="px-4">
-        <h2 class="text-3xl font-bold mb-4">Yur welcom</h2>
-
-        <ul class="playlists-list gap-4">
-          {playlists.map((playlist) => <PlaylistItemCard {...playlist} />)}
-        </ul>
-      </section>
-    </main>
-
-    <footer slot="player" class="card-1">kie</footer>
-  </AppLayout>
-</Layout>
+      <ul class="playlists-list gap-4">
+        {playlists.map((playlist) => <PlaylistItemCard {...playlist} />)}
+      </ul>
+    </section>
+  </main>
+</AppPage>
 
 <style>
   .playlists-list {
