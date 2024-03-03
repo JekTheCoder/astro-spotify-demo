@@ -5,6 +5,7 @@ import LibrariesNav from "../components/LibrariesNav.astro";
 import PlaylistItemCard from "../components/PlaylistItemCard.astro";
 import AppLayout from "../layouts/AppLayout.astro";
 import "../styles/cards.scss";
+import { Image } from "astro:assets";
 
 import { playlists } from "@/lib/data";
 ---
@@ -29,10 +30,13 @@ import { playlists } from "@/lib/data";
         </div>
 
         <picture class="relative z-20">
-          <img
+          <Image
             class="w-full h-full object-cover rounded-md"
             src="http://vinyl.lofirecords.com/cdn/shop/files/LofiLyon_Day_1_517f0be5-0197-4030-9f18-0ac245cef7d1.png?v=1708540042"
             alt="LofiLyon Day 1"
+						width={526}
+						height={296}
+						loading="eager"
           />
         </picture>
       </header>

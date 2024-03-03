@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import type { Playlist } from "@/lib/data";
 type Props = Playlist;
 
@@ -11,10 +12,13 @@ const joinedArtists = artists.join(", ");
   href={`/playlists/${id}`}
 >
   <picture>
-    <img
+    <Image
       class="object-cover w-full h-full rounded-md"
       src={cover}
       alt={`Cover of ${title} by ${joinedArtists}`}
+			width={154}
+			height={154}
+			loading="eager"
     />
   </picture>
 
