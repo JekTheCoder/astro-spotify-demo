@@ -1,0 +1,74 @@
+---
+import { allPlaylists, songs } from "@/lib/data";
+import AppPage from "../../layouts/AppPage.astro";
+import { Image } from "astro:assets";
+
+const { id } = Astro.params;
+const playlist = allPlaylists.find((playlist) => playlist.id === id);
+
+if (!playlist) {
+  Astro.redirect("/not-found");
+  return;
+}
+
+const playlistSongs = songs.filter((song) => song.albumId === playlist.albumId);
+const { title, cover, artists, color } = playlist;
+
+const joinedArtists = artists.join(", ");
+---
+
+<AppPage>
+  <main
+    class="rounded-lg overflow-hidden grid grid-rows-[auto_1fr]"
+    transition:name=`playlist-${id}-box`
+  >
+    <header class="relative">
+      <nav class="p-10"></nav>
+
+      <div class="playlist-header relative px-6 grid gap-x-5 z-10">
+        <div class="flex items-end">
+          <picture class="shadow-black shadow-2xl">
+            <Image
+              class="object-contain w-full aspect-square rounded-md"
+              src={cover}
+              alt={`Cover of ${title} by ${joinedArtists}`}
+              width={154}
+              height={154}
+              loading="eager"
+              transition:name=`playlist-${id}-image`
+            />
+          </picture>
+        </div>
+
+        <div class="flex flex-col justify-end">
+          <h2
+            class="text-3xl lg:text-5xl xl:text-6xl 2xl:text-8xl font-bold text-white"
+            transition:name=`playlist-${id}-name`
+          >
+            {title}
+          </h2>
+
+          <span>{joinedArtists}</span>
+        </div>
+      </div>
+
+      <div
+        class="absolute inset-0 bg-color bg-gradient-to-t from-zinc-900 via-zinc-900/15"
+        style={`background-color: ${color.accent}`}
+      >
+      </div>
+    </header>
+
+    <section class="bg-zinc-900 p-4">ddddadw d</section>
+  </main>
+</AppPage>
+
+<style>
+  .playlist-header {
+    grid-template-columns: minmax(8rem, 2fr) 9fr;
+  }
+
+  .bg-color {
+    height: 200%;
+  }
+</style>

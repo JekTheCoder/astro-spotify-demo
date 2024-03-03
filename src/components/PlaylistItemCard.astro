@@ -10,21 +10,24 @@ const joinedArtists = artists.join(", ");
 <a
   class="playlist-item p-2 grid grid-rows-[auto_5rem] grid-cols-1 gap-3 rounded-md bg-zinc-800 hover:bg-zinc-700 transition-colors"
   href={`/playlists/${id}`}
+  transition:name=`playlist-${id}-box`
 >
   <picture>
     <Image
       class="object-cover w-full h-full rounded-md"
       src={cover}
       alt={`Cover of ${title} by ${joinedArtists}`}
-			width={154}
-			height={154}
-			loading="eager"
-			transition:name=`playlist-${id}-image`
+      width={154}
+      height={154}
+      loading="eager"
+      transition:name=`playlist-${id}-image`
     />
   </picture>
 
   <div class="truncate">
-    <h4 class="text-md text-white">{title}</h4>
+    <h4 class="text-md text-white" transition:name=`playlist-${id}-name`>
+      {title}
+    </h4>
     <span class="text-sm text-gray-400">{joinedArtists}</span>
   </div>
 </a>
