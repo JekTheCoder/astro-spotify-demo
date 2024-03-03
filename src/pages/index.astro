@@ -3,16 +3,34 @@ import Layout from "../layouts/Layout.astro";
 import Home from "../layouts/Home.astro";
 import GeneralNav from "../components/GeneralNav.astro";
 import LibrariesNav from "../components/LibrariesNav.astro";
+import PlaylistItemCard from "../components/PlaylistItemCard.astro";
 import "../styles/cards.css";
+
+import { playlists } from "@/lib/data";
 ---
 
 <Layout title="Spofity ;)">
   <Home>
     <aside slot="aside" class="grid grid-rows-[auto_1fr] gap-2">
       <GeneralNav />
-			<LibrariesNav />
+      <LibrariesNav />
     </aside>
-    <main slot="main" class="card-1">2</main>
+
+    <main slot="main" class="card-1">
+      <section>
+        <ul class="playlists-list gap-4">
+          {playlists.map((playlist) => <PlaylistItemCard {...playlist} />)}
+        </ul>
+      </section>
+    </main>
+
     <footer slot="player" class="card-1">kie</footer>
   </Home>
 </Layout>
+
+<style>
+	.playlists-list {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	}
+</style>
