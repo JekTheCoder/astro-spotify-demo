@@ -1,8 +1,17 @@
 {
   "extends": "astro/tsconfigs/strict",
-	"compilerOptions": {
-		"plugins": [{
-			"name": "@astrojs/ts-plugin"
-		}]
-	}
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@astrojs/ts-plugin"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/components/*": ["src/components/*"],
+      "@/icons/*": ["src/components/icons/*"],
+      "@lib/*": ["src/lib/*"]
+    }
+  }
 }
