@@ -4,7 +4,7 @@ import GeneralNav from "../components/GeneralNav.astro";
 import LibrariesNav from "../components/LibrariesNav.astro";
 import PlaylistItemCard from "../components/PlaylistItemCard.astro";
 import AppLayout from "../layouts/AppLayout.astro";
-import "../styles/cards.css";
+import "../styles/cards.scss";
 
 import { playlists } from "@/lib/data";
 ---
@@ -16,8 +16,34 @@ import { playlists } from "@/lib/data";
       <LibrariesNav />
     </aside>
 
-    <main slot="main" class="card-1">
+    <main
+      slot="main"
+      class="card-1 pb-10 overflow-y-auto relative transition-all duration-1000"
+    >
+      <header class="relative z-10 px-6 bg-green-600">
+        <nav class="py-4">Navigation!</nav>
+
+        <div
+          class="absolute z-10 inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/80"
+        >
+        </div>
+
+        <picture class="relative z-20">
+          <img
+            class="w-full h-full object-cover rounded-md"
+            src="http://vinyl.lofirecords.com/cdn/shop/files/LofiLyon_Day_1_517f0be5-0197-4030-9f18-0ac245cef7d1.png?v=1708540042"
+            alt="LofiLyon Day 1"
+          />
+        </picture>
+      </header>
+
       <section>
+        <div class="py-4"></div>
+      </section>
+
+      <section class="px-4">
+        <h2 class="text-3xl font-bold mb-4">Yur welcom</h2>
+
         <ul class="playlists-list gap-4">
           {playlists.map((playlist) => <PlaylistItemCard {...playlist} />)}
         </ul>
