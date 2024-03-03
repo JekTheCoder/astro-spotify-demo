@@ -1,14 +1,17 @@
 import { songs, type Song, allPlaylists, type Playlist } from "@/lib/data";
 import { create } from "zustand";
 
-type MusicPlayedStore = {
-  data: {
-    playlist: Playlist;
-    musicId: number;
-    isPlaying: boolean;
-  } | null;
+export type MusicPlayedStore = {
+  data: MusicPlayed | null;
   toggle: () => void;
   setPlaylist: (playlistId: string) => void;
+};
+
+export type MusicPlayed = {
+  playlist: Playlist;
+  musicId: number;
+	albumId: number;
+  isPlaying: boolean;
 };
 
 export const useMusicPlayed = create<MusicPlayedStore>((set) => {
@@ -33,18 +36,19 @@ export const useMusicPlayed = create<MusicPlayedStore>((set) => {
           };
 
         const playlist = getPlaylist(playlistId);
-				if (!playlist) return {};
+        if (!playlist) return {};
 
-				const music = getMusic(playlist.albumId);
-				if (!music) return {};
+        const music = getMusic(playlist.albumId);
+        if (!music) return {};
 
         return {
-					data: {
-						playlist,
-						musicId: music.id,
-						isPlaying: true,
-					},
-				};
+          data: {
+            playlist,
+            musicId: music.id,
+						albumId: music.albumId,
+            isPlaying: true,
+          },
+        };
       }),
   };
 });

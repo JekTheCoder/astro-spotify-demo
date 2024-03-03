@@ -20,10 +20,7 @@ export default function PlaylistButton({ playlistId }: Props) {
     event.preventDefault();
     event.stopPropagation();
 
-		console.log('now toggling', playlistId)
     musicStore().setPlaylist(playlistId);
-		
-		console.log('now played', musicStore())
   };
 
   return (
