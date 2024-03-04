@@ -1,0 +1,71 @@
+.slider {
+  --slider-primary-bg: theme("colors.white");
+  --slider-rest-bg: theme("colors.zinc.600");
+
+  -webkit-appearance: none;
+  appearance: none;
+
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  border-radius: 15px;
+
+  height: 6px;
+}
+
+@mixin thumb_active() {
+  height: 15px;
+  width: 15px;
+  background-color: theme("colors.white");
+  display: block;
+}
+
+@mixin thumb() {
+  display: none;
+  border-radius: 50%;
+  border: none;
+
+  transition: 0.2s ease-in-out;
+}
+
+/* Thumb: webkit */
+.slider::-webkit-slider-thumb {
+  /* removing default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+
+  @include thumb();
+}
+
+/* Thumb: Firefox */
+.slider::-moz-range-thumb {
+  @include thumb();
+}
+
+.slider:active, .slider:focus, .slider:hover {
+  --slider-primary-bg: theme("colors.green.500");
+}
+
+/* Hover, active & focus Thumb: Webkit */
+
+.slider::-webkit-slider-thumb:hover {
+  @include thumb_active();
+}
+.slider:active::-webkit-slider-thumb {
+  @include thumb_active();
+}
+.slider:focus::-webkit-slider-thumb {
+  @include thumb_active();
+}
+
+/* Hover, active & focus Thumb: Firfox */
+
+.slider::-moz-range-thumb:hover {
+  @include thumb_active();
+}
+.slider:active::-moz-range-thumb {
+  @include thumb_active();
+}
+.slider:focus::-moz-range-thumb {
+  @include thumb_active();
+}

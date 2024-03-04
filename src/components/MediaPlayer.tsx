@@ -4,11 +4,17 @@ import {
   type MusicPlayedStore,
   type MusicPlayed,
 } from "@/store/played";
-import { Show, createEffect } from "solid-js";
+import { Show, createEffect, createSignal } from "solid-js";
 import { Pause, Play } from "./solid-buttons";
+import Volume, { type VolumeData } from "./MediaPlayer/Volume";
 
 export default function MediaPlayer() {
   const musicStore = useStore(useMusicPlayed);
+  const volumeSignal = createSignal<VolumeData>({
+    value: .1,
+    mute: false,
+  });
+
   const audio = (<audio src=""></audio>) as HTMLAudioElement;
 
   const toggle = () => musicStore().toggle();
@@ -26,6 +32,12 @@ export default function MediaPlayer() {
     return musicStore();
   }, musicStore());
 
+	createEffect(() => {
+		const [volume] = volumeSignal;
+		audio.volume = volume().value;
+		audio.muted = volume().mute;
+	});
+
   return (
     <div
       class={`flex items-center justify-between h-32 ${disabled() ? "text-gray-500" : "text-white"}`}
@@ -38,7 +50,10 @@ export default function MediaPlayer() {
           </Show>
         </button>
       </div>
-      <div>c</div>
+
+      <div>
+        <Volume volume={volumeSignal} />
+      </div>
 
       {audio}
     </div>
