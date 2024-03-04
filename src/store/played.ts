@@ -12,6 +12,7 @@ export type MusicPlayed = {
   musicId: number;
 	albumId: number;
   isPlaying: boolean;
+	song: Song
 };
 
 export const useMusicPlayed = create<MusicPlayedStore>((set) => {
@@ -47,6 +48,7 @@ export const useMusicPlayed = create<MusicPlayedStore>((set) => {
             musicId: music.id,
 						albumId: music.albumId,
             isPlaying: true,
+						song: music
           },
         };
       }),

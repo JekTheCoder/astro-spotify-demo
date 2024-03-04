@@ -7,6 +7,7 @@ import {
 import { Show, createEffect, createSignal } from "solid-js";
 import { Pause, Play } from "./solid-buttons";
 import Volume, { type VolumeData } from "./MediaPlayer/Volume";
+import SongPlayed from "./SongPlayed";
 
 export default function MediaPlayer() {
   const musicStore = useStore(useMusicPlayed);
@@ -20,6 +21,7 @@ export default function MediaPlayer() {
   const toggle = () => musicStore().toggle();
   const disabled = () => musicStore().data === null;
   const playing = () => Boolean(musicStore().data?.isPlaying);
+	const song = () => musicStore().data?.song;
 
   createEffect<MusicPlayedStore>((prev) => {
     const { data } = musicStore();
@@ -40,9 +42,14 @@ export default function MediaPlayer() {
 
   return (
     <div
-      class={`flex items-center justify-between h-32 ${disabled() ? "text-gray-500" : "text-white"}`}
+      class={`px-4 py-2 flex items-center justify-between ${disabled() ? "text-gray-500" : "text-white"}`}
     >
-      <div>a</div>
+      <div class="h-16">
+				<Show when={song()}>
+					{song => <SongPlayed song={song} />}
+				</Show>
+			</div>
+
       <div>
         <button onClick={toggle} disabled={disabled()}>
           <Show when={playing()} fallback={<Play />}>
