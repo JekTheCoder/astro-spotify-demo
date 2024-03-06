@@ -5,7 +5,7 @@ export type MusicPlayedStore = {
   data: MusicPlayed | null;
   toggle: () => void;
   setPlaylist: (playlistId: string) => void;
-	stepSong: (step: number) => void;
+  stepSong: (step: number) => void;
 };
 
 export type MusicPlayed = {
@@ -43,6 +43,8 @@ export const useMusicPlayed = create<MusicPlayedStore>((set) => {
         const music = getMusic(playlist.albumId);
         if (!music) return {};
 
+				currentSongTime.getState().reset();
+
         return {
           data: {
             playlist,
@@ -60,6 +62,8 @@ export const useMusicPlayed = create<MusicPlayedStore>((set) => {
         const song = stepSong(state.data.musicId, step);
         if (!song) return {};
 
+				currentSongTime.getState().reset();
+
         return {
           data: {
             ...state.data,
@@ -70,6 +74,18 @@ export const useMusicPlayed = create<MusicPlayedStore>((set) => {
       }),
   };
 });
+
+export type SongTimeStore = {
+  time: number | null;
+	reset: () => void;
+	update: (time: number) => void;
+};
+
+export const currentSongTime = create<SongTimeStore>((set) => ({
+  time: null,
+	reset: () => set({ time: null }),
+	update: (time: number) => set({ time }),
+}));
 
 function getPlaylist(playlistId: string): Playlist | undefined {
   return allPlaylists.find((playlist) => playlist.id === playlistId);

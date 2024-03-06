@@ -3,11 +3,13 @@ import {
   useMusicPlayed,
   type MusicPlayedStore,
   type MusicPlayed,
+  currentSongTime,
 } from "@/store/played";
 import { Show, createEffect, createSignal } from "solid-js";
 import { Pause, Play } from "./solid-buttons";
 import Volume, { type VolumeData } from "./MediaPlayer/Volume";
 import SongPlayed from "./SongPlayed";
+import SongDuration from "./MediaPlayer/SongDuration";
 
 const NextIcon = () => (
   <svg
@@ -29,15 +31,24 @@ export default function MediaPlayer() {
     value: 0.1,
     mute: false,
   });
+  const currentSongTimeStore = useStore(currentSongTime);
 
-  const audio = (<audio src=""></audio>) as HTMLAudioElement;
+  const onTimeUpdate = () => currentSongTimeStore().update(audio.currentTime);
+
+  const audio = (
+    <audio src="" onTimeUpdate={onTimeUpdate}></audio>
+  ) as HTMLAudioElement;
 
   const disabled = () => musicStore().data === null;
   const playing = () => Boolean(musicStore().data?.isPlaying);
   const song = () => musicStore().data?.song;
 
   const toggle = () => musicStore().toggle();
-	const stepSong = (step: number) => musicStore().stepSong(step);
+  const stepSong = (step: number) => musicStore().stepSong(step);
+
+  const setCurrentTime = (time: number) => {
+    audio.currentTime = time;
+  };
 
   createEffect<MusicPlayedStore>((prev) => {
     const { data } = musicStore();
@@ -64,24 +75,32 @@ export default function MediaPlayer() {
         <Show when={song()}>{(song) => <SongPlayed song={song} />}</Show>
       </div>
 
-      <div class="flex gap-x-6 justify-self-center">
-        <button disabled={disabled()} class="-scale-x-100" onClick={() => stepSong(-1)}>
-          <NextIcon />
-        </button>
+      <div class="flex flex-col  justify-self-center">
+        <div class="flex gap-x-6 justify-center">
+          <button
+            disabled={disabled()}
+            class="-scale-x-100"
+            onClick={() => stepSong(-1)}
+          >
+            <NextIcon />
+          </button>
 
-        <button
-          class={`rounded-full h-10 w-10 grid place-content-center ${disabled() ? "bg-gray-500" : "bg-white"} text-black p-2`}
-          onClick={toggle}
-          disabled={disabled()}
-        >
-          <Show when={playing()} fallback={<Play />}>
-            <Pause />
-          </Show>
-        </button>
+          <button
+            class={`rounded-full h-10 w-10 grid place-content-center ${disabled() ? "bg-gray-500" : "bg-white"} text-black p-2`}
+            onClick={toggle}
+            disabled={disabled()}
+          >
+            <Show when={playing()} fallback={<Play />}>
+              <Pause />
+            </Show>
+          </button>
 
-        <button disabled={disabled()} onClick={() => stepSong(1)}>
-          <NextIcon />
-        </button>
+          <button disabled={disabled()} onClick={() => stepSong(1)}>
+            <NextIcon />
+          </button>
+        </div>
+
+        <SongDuration onTimeChange={setCurrentTime}/>
       </div>
 
       <div class="justify-self-end">
