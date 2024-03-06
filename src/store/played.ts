@@ -43,7 +43,7 @@ export const useMusicPlayed = create<MusicPlayedStore>((set) => {
         const music = getMusic(playlist.albumId);
         if (!music) return {};
 
-				currentSongTime.getState().reset();
+				currentSongTime.getState().update(0);
 
         return {
           data: {
@@ -62,7 +62,7 @@ export const useMusicPlayed = create<MusicPlayedStore>((set) => {
         const song = stepSong(state.data.musicId, step);
         if (!song) return {};
 
-				currentSongTime.getState().reset();
+				currentSongTime.getState().update(0);
 
         return {
           data: {
