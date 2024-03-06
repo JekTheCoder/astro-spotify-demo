@@ -12,7 +12,7 @@ import SongPlayed from "./SongPlayed";
 export default function MediaPlayer() {
   const musicStore = useStore(useMusicPlayed);
   const volumeSignal = createSignal<VolumeData>({
-    value: .1,
+    value: 0.1,
     mute: false,
   });
 
@@ -21,7 +21,7 @@ export default function MediaPlayer() {
   const toggle = () => musicStore().toggle();
   const disabled = () => musicStore().data === null;
   const playing = () => Boolean(musicStore().data?.isPlaying);
-	const song = () => musicStore().data?.song;
+  const song = () => musicStore().data?.song;
 
   createEffect<MusicPlayedStore>((prev) => {
     const { data } = musicStore();
@@ -34,31 +34,33 @@ export default function MediaPlayer() {
     return musicStore();
   }, musicStore());
 
-	createEffect(() => {
-		const [volume] = volumeSignal;
-		audio.volume = volume().value;
-		audio.muted = volume().mute;
-	});
+  createEffect(() => {
+    const [volume] = volumeSignal;
+    audio.volume = volume().value;
+    audio.muted = volume().mute;
+  });
 
   return (
     <div
-      class={`px-4 py-2 flex items-center justify-between ${disabled() ? "text-gray-500" : "text-white"}`}
+      class={`px-4 py-2 grid grid-cols-3 items-center ${disabled() ? "text-gray-500" : "text-white"}`}
     >
-      <div class="h-16">
-				<Show when={song()}>
-					{song => <SongPlayed song={song} />}
-				</Show>
-			</div>
+      <div class="h-16 justify-self-start">
+        <Show when={song()}>{(song) => <SongPlayed song={song} />}</Show>
+      </div>
 
-      <div>
-        <button onClick={toggle} disabled={disabled()}>
+      <div class="justify-self-center">
+        <button
+          class={`rounded-full h-10 w-10 grid place-content-center ${disabled() ? "bg-gray-500" : "bg-white"} text-black p-2`}
+          onClick={toggle}
+          disabled={disabled()}
+        >
           <Show when={playing()} fallback={<Play />}>
             <Pause />
           </Show>
         </button>
       </div>
 
-      <div>
+      <div class="justify-self-end">
         <Volume volume={volumeSignal} />
       </div>
 

@@ -10,59 +10,36 @@ export type Props = {
   volume: [Accessor<VolumeData>, Setter<VolumeData>];
 };
 
-function NotMutedIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="h-6 w-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      stroke-width="2"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
-      />
-    </svg>
-  );
-}
+const MuteIcon = () => (
+  <svg
+    fill="currentColor"
+    role="presentation"
+    height="16"
+    width="16"
+    aria-hidden="true"
+    aria-label="Volumen apagado"
+    viewBox="0 0 16 16"
+  >
+    <path d="M13.86 5.47a.75.75 0 0 0-1.061 0l-1.47 1.47-1.47-1.47A.75.75 0 0 0 8.8 6.53L10.269 8l-1.47 1.47a.75.75 0 1 0 1.06 1.06l1.47-1.47 1.47 1.47a.75.75 0 0 0 1.06-1.06L12.39 8l1.47-1.47a.75.75 0 0 0 0-1.06z"></path>
+    <path d="M10.116 1.5A.75.75 0 0 0 8.991.85l-6.925 4a3.642 3.642 0 0 0-1.33 4.967 3.639 3.639 0 0 0 1.33 1.332l6.925 4a.75.75 0 0 0 1.125-.649v-1.906a4.73 4.73 0 0 1-1.5-.694v1.3L2.817 9.852a2.141 2.141 0 0 1-.781-2.92c.187-.324.456-.594.78-.782l5.8-3.35v1.3c.45-.313.956-.55 1.5-.694V1.5z"></path>
+  </svg>
+);
 
-function MuteIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="h-6 w-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      stroke-width="2"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M5 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
-      />
-      <line
-        x1="17"
-        y1="9"
-        x2="23"
-        y2="15"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <line
-        x1="23"
-        y1="9"
-        x2="17"
-        y2="15"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
-  );
-}
+const NotMutedIcon = () => (
+  <svg
+    fill="currentColor"
+    role="presentation"
+    height="16"
+    width="16"
+    aria-hidden="true"
+    aria-label="Volumen alto"
+    id="volume-icon"
+    viewBox="0 0 16 16"
+  >
+    <path d="M9.741.85a.75.75 0 0 1 .375.65v13a.75.75 0 0 1-1.125.65l-6.925-4a3.642 3.642 0 0 1-1.33-4.967 3.639 3.639 0 0 1 1.33-1.332l6.925-4a.75.75 0 0 1 .75 0zm-6.924 5.3a2.139 2.139 0 0 0 0 3.7l5.8 3.35V2.8l-5.8 3.35zm8.683 4.29V5.56a2.75 2.75 0 0 1 0 4.88z"></path>
+    <path d="M11.5 13.614a5.752 5.752 0 0 0 0-11.228v1.55a4.252 4.252 0 0 1 0 8.127v1.55z"></path>
+  </svg>
+);
 
 export default function Volume({ volume: [volume, setVolume] }: Props) {
   const toggleMute = () => {
@@ -73,7 +50,7 @@ export default function Volume({ volume: [volume, setVolume] }: Props) {
     setVolume({ mute: value === 0, value });
   };
 
-	const fixedValue = () => volume().mute ? 0 : volume().value;
+  const fixedValue = () => (volume().mute ? 0 : volume().value);
 
   return (
     <div class="flex items-center gap-x-2 text-white">
