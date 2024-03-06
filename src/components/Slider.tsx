@@ -1,16 +1,18 @@
-import type { Signal } from "solid-js";
+import type { Accessor, Signal } from "solid-js";
 
 type Props = {
   value: Signal<number>;
-  max?: number;
+  max?: Accessor<number>;
   min?: number;
   step?: number;
 };
 
-export function Slider({ value, max = 100, min = 1, step = 1 }: Props) {
+const defaultMax: Accessor<number> = () => 100;
+
+export function Slider({ value, max = defaultMax, min = 1, step = 1 }: Props) {
   const [v, setV] = value;
   const bg = () => {
-    const progress = (v() / max) * 100;
+    const progress = (v() / max()) * 100;
     return `linear-gradient(to right, var(--slider-primary-bg) ${progress}%, var(--slider-rest-bg) ${progress}%)`;
   };
 
@@ -26,7 +28,7 @@ export function Slider({ value, max = 100, min = 1, step = 1 }: Props) {
       class="slider"
       type="range"
       min={min}
-      max={max}
+      max={max()}
       value={v()}
       step={step}
       style={{ background: bg() }}

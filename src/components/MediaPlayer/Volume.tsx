@@ -63,7 +63,7 @@ export default function Volume({ volume: [volume, setVolume] }: Props) {
       <Slider
         min={0}
         step={0.01}
-        max={1}
+        max={() => 1}
         value={[fixedValue, changeVolume as Setter<number>]}
       />
     </div>

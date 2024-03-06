@@ -22,17 +22,29 @@ export default function SongDuration({ onTimeChange }: Props) {
 
   const time = () => timeStore().time ?? 0;
 
-  const duration = () => musicStore().data?.song?.duration ?? invalidDuration;
+  const durationFormatted = () =>
+    musicStore().data?.song?.duration ?? invalidDuration;
+
+  const duration = () => {
+    const { data } = musicStore();
+    if (!data) return 0;
+
+    return parseDuration(data.song.duration);
+  };
 
   return (
     <div
       class={`grid grid-cols-[auto_1fr_auto] gap-x-4 items-center ${disabled() ? "text-gray-500" : "text-white"}`}
     >
-      <span>{timeFormatted()}</span>
+      <span class="w-10">{timeFormatted()}</span>
 
-      <Slider min={0} value={[time, onTimeChange as Setter<number>]} />
+      <Slider
+        min={0}
+        value={[time, onTimeChange as Setter<number>]}
+        max={duration}
+      />
 
-      <span>{duration()}</span>
+      <span class="w-10 text-end">{durationFormatted()}</span>
     </div>
   );
 }
@@ -42,4 +54,9 @@ function formatTime(time: number): string {
   const seconds = Math.floor(time % 60);
 
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+
+function parseDuration(duration: string): number {
+  const [minutes, seconds] = duration.split(":").map(Number);
+  return minutes * 60 + seconds;
 }
