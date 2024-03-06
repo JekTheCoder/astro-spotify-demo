@@ -10,10 +10,10 @@ const joinedArtists = artists.join(", ");
 ---
 
 <article
-  class="playlist-item relative transition-colors group"
+  class="playlist-item relative transition-colors group bg-zinc-800 hover:bg-zinc-700 rounded-md"
   transition:name=`playlist-${id}-box`
 >
-  <div class="absolute top-0 right-0 w-full m-4">
+  <div class="absolute inset-0 w-full px-4 pt-4 h-min">
     <div class="w-full aspect-square relative">
       <div
         class="absolute bottom-2 right-2 z-50 opacity-0 group-hover:opacity-100 group-hover:-translate-y-1 transition-[opacity,transform]"
@@ -24,7 +24,7 @@ const joinedArtists = artists.join(", ");
   </div>
 
   <a
-    class="p-4 grid grid-rows-[auto_5rem] grid-cols-1 gap-3 rounded-md bg-zinc-800 hover:bg-zinc-700 z-20"
+    class="p-4 grid grid-rows-[auto_5rem] grid-cols-1 gap-3 z-20 relative"
     href={`/playlists/${id}`}
   >
     <picture class="relative">
