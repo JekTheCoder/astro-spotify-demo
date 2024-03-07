@@ -1,6 +1,6 @@
 import { Show } from "solid-js";
 import { Play, Pause } from "./solid-buttons";
-import { useMusicPlayed } from "@/store/played";
+import { setPlaylist, useMusicPlayed } from "@/store/played";
 import { useStore } from "@/store";
 
 export type Props = {
@@ -20,7 +20,7 @@ export default function PlaylistButton({ playlistId }: Props) {
     event.preventDefault();
     event.stopPropagation();
 
-    musicStore().setPlaylist(playlistId);
+		setPlaylist(playlistId);
   };
 
   return (

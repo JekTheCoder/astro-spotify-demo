@@ -1,11 +1,20 @@
-import { songs, type Song, allPlaylists, type Playlist } from "@/lib/data";
+import { songs, type Song, type Playlist } from "@/lib/data";
 import { create } from "zustand";
+import { currentSongTime } from "./time";
+export * from "./time";
 
 export type MusicPlayedStore = {
   data: MusicPlayed | null;
   toggle: () => void;
-  setPlaylist: (playlistId: string) => void;
+  setPlaylist: (set: {
+    playlist: Playlist;
+    musicId: number;
+    albumId: number;
+    song: Song;
+    songs: Song[];
+  }) => void;
   stepSong: (step: number) => void;
+  reset: () => void;
 };
 
 export type MusicPlayed = {
@@ -30,31 +39,15 @@ export const useMusicPlayed = create<MusicPlayedStore>((set) => {
           data: { ...state.data, isPlaying: !state.data.isPlaying },
         };
       }),
-    setPlaylist: (playlistId: string) =>
-      set((state) => {
-        if (state.data && state.data.playlist.id === playlistId)
-          return {
-            data: { ...state.data, isPlaying: !state.data.isPlaying },
-          };
-
-        const playlist = getPlaylist(playlistId);
-        if (!playlist) return {};
-
-        const music = getMusic(playlist.albumId);
-        if (!music) return {};
-
-				currentSongTime.getState().update(0);
-
-        return {
-          data: {
-            playlist,
-            musicId: music.id,
-            albumId: music.albumId,
-            isPlaying: true,
-            song: music,
-          },
-        };
+    setPlaylist: (data) =>
+      set({
+        data: {
+          ...data,
+          isPlaying: true,
+        },
       }),
+
+    reset: () => set({ data: null }),
 
     stepSong: (step: number) =>
       set((state) => {
@@ -62,7 +55,7 @@ export const useMusicPlayed = create<MusicPlayedStore>((set) => {
         const song = stepSong(state.data.musicId, step);
         if (!song) return {};
 
-				currentSongTime.getState().update(0);
+        currentSongTime.getState().update(0);
 
         return {
           data: {
@@ -75,28 +68,67 @@ export const useMusicPlayed = create<MusicPlayedStore>((set) => {
   };
 });
 
-export type SongTimeStore = {
-  time: number | null;
-	reset: () => void;
-	update: (time: number) => void;
-};
-
-export const currentSongTime = create<SongTimeStore>((set) => ({
-  time: null,
-	reset: () => set({ time: null }),
-	update: (time: number) => set({ time }),
-}));
-
-function getPlaylist(playlistId: string): Playlist | undefined {
-  return allPlaylists.find((playlist) => playlist.id === playlistId);
-}
-
-function getMusic(albumId: number): Song | undefined {
-  return songs.find((song) => song.albumId === albumId);
-}
-
 function stepSong(currentSongId: number, step: number): Song | undefined {
   const index = songs.findIndex((song) => song.id === currentSongId);
   const nextIndex = (index + step + songs.length) % songs.length;
   return songs.at(nextIndex);
+}
+
+class ChangePlaylistQueue {
+  private abort?: AbortController;
+  private resetAbort?: AbortController;
+
+  setPlaylist(playlistId: string) {
+    this.abort?.abort();
+    this.resetAbort?.abort();
+
+    this.abort = new AbortController();
+    this.resetAbort = new AbortController();
+
+    timeout(
+      () => {
+        currentSongTime.getState().reset();
+        useMusicPlayed.getState().reset();
+      },
+      100,
+      this.resetAbort.signal,
+    );
+
+    fetch("/api/get-info-playlist.json/" + playlistId, {
+      signal: this.abort.signal,
+    })
+      .then((res) => res.json())
+      .then(({ playlist, songs }: { playlist: Playlist; songs: Song[] }) => {
+        const song = songs[0];
+        if (!song) return;
+
+        this.resetAbort?.abort();
+
+        useMusicPlayed.getState().setPlaylist({
+          playlist,
+          musicId: song.id,
+          albumId: song.albumId,
+          song,
+          songs,
+        });
+
+        currentSongTime.getState().update(0);
+      });
+  }
+}
+
+const playlistQueue = new ChangePlaylistQueue();
+export function setPlaylist(playlistId: string) {
+  playlistQueue.setPlaylist(playlistId);
+}
+
+function timeout(fn: () => void, ms: number, signal: AbortSignal) {
+  const callback = () => {
+    fn();
+    signal.removeEventListener("abort", callback);
+  };
+  const id = setTimeout(callback, ms);
+  signal.addEventListener("abort", () => {
+    clearTimeout(id);
+  });
 }
