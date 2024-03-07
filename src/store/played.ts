@@ -1,4 +1,4 @@
-import { songs, type Song, type Playlist } from "@/lib/data";
+import { type Song, type Playlist } from "@/lib/data";
 import { create } from "zustand";
 import { currentSongTime } from "./time";
 export * from "./time";
@@ -23,6 +23,7 @@ export type MusicPlayed = {
   albumId: number;
   isPlaying: boolean;
   song: Song;
+  songs: Song[];
 };
 
 export const useMusicPlayed = create<MusicPlayedStore>((set) => {
@@ -52,7 +53,7 @@ export const useMusicPlayed = create<MusicPlayedStore>((set) => {
     stepSong: (step: number) =>
       set((state) => {
         if (!state.data) return {};
-        const song = stepSong(state.data.musicId, step);
+        const song = stepSong(state.data.musicId, step, state.data.songs);
         if (!song) return {};
 
         currentSongTime.getState().update(0);
@@ -73,7 +74,11 @@ export function reset() {
   currentSongTime.getState().reset();
 }
 
-function stepSong(currentSongId: number, step: number): Song | undefined {
+function stepSong(
+  currentSongId: number,
+  step: number,
+  songs: Song[],
+): Song | undefined {
   const index = songs.findIndex((song) => song.id === currentSongId);
   const nextIndex = (index + step + songs.length) % songs.length;
   return songs.at(nextIndex);
