@@ -52,9 +52,6 @@ export default function MediaPlayer() {
 
   createEffect<MusicPlayedStore>((prev) => {
     const { data } = musicStore();
-    if (!data) {
-      return musicStore();
-    }
 
     musicEffect(prev?.data, data, audio);
 
@@ -100,7 +97,7 @@ export default function MediaPlayer() {
           </button>
         </div>
 
-        <SongDuration onTimeChange={setCurrentTime}/>
+        <SongDuration onTimeChange={setCurrentTime} />
       </div>
 
       <div class="justify-self-end">
@@ -114,9 +111,16 @@ export default function MediaPlayer() {
 
 function musicEffect(
   prev: MusicPlayed | undefined | null,
-  { musicId, albumId, isPlaying }: MusicPlayed,
+  data: MusicPlayed | null,
   audio: HTMLAudioElement,
 ) {
+  if (!data) {
+    audio.src = "";
+    return;
+  }
+
+  const { musicId, albumId, isPlaying } = data;
+
   if (!prev || musicId !== prev.musicId || albumId !== prev.albumId) {
     const musicIdStr = musicId.toString().padStart(2, "0");
     audio.src = `/music/${albumId}/${musicIdStr}.mp3`;

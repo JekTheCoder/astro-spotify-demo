@@ -68,6 +68,11 @@ export const useMusicPlayed = create<MusicPlayedStore>((set) => {
   };
 });
 
+export function reset() {
+  useMusicPlayed.getState().reset();
+  currentSongTime.getState().reset();
+}
+
 function stepSong(currentSongId: number, step: number): Song | undefined {
   const index = songs.findIndex((song) => song.id === currentSongId);
   const nextIndex = (index + step + songs.length) % songs.length;
@@ -85,14 +90,7 @@ class ChangePlaylistQueue {
     this.abort = new AbortController();
     this.resetAbort = new AbortController();
 
-    timeout(
-      () => {
-        currentSongTime.getState().reset();
-        useMusicPlayed.getState().reset();
-      },
-      100,
-      this.resetAbort.signal,
-    );
+    timeout(reset, 100, this.resetAbort.signal);
 
     fetch("/api/get-info-playlist.json/" + playlistId, {
       signal: this.abort.signal,
@@ -100,9 +98,13 @@ class ChangePlaylistQueue {
       .then((res) => res.json())
       .then(({ playlist, songs }: { playlist: Playlist; songs: Song[] }) => {
         const song = songs[0];
-        if (!song) return;
 
         this.resetAbort?.abort();
+
+        if (!song) {
+          reset();
+          return;
+        }
 
         useMusicPlayed.getState().setPlaylist({
           playlist,
