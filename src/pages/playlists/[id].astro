@@ -2,6 +2,7 @@
 import { allPlaylists, songs } from "@/lib/data";
 import AppPage from "../../layouts/AppPage.astro";
 import { Image } from "astro:assets";
+import PlaylistButton from "@/components/PlaylistButton";
 
 const { id } = Astro.params;
 const playlist = allPlaylists.find((playlist) => playlist.id === id);
@@ -22,7 +23,7 @@ const joinedArtists = artists.join(", ");
     class="rounded-lg overflow-hidden grid grid-rows-[auto_1fr]"
     transition:name=`playlist-${id}-box`
   >
-    <header class="relative">
+    <header class="relative pb-6">
       <nav class="p-10"></nav>
 
       <div class="playlist-header relative px-6 grid gap-x-5 z-10">
@@ -53,13 +54,17 @@ const joinedArtists = artists.join(", ");
       </div>
 
       <div
-        class="absolute inset-0 bg-color bg-gradient-to-t from-zinc-900 via-zinc-900/15"
-        style={`background-color: ${color.accent}`}
+        class="absolute inset-0 bg-color"
+        style={`--bg-color: ${color.accent}`}
       >
       </div>
     </header>
 
-    <section class="bg-zinc-900 p-4">ddddadw d</section>
+    <section class="bg-zinc-900 p-4">
+      <div class="text-black relative z-10">
+        <PlaylistButton client:load playlistId={playlist.id} />
+      </div>
+    </section>
   </main>
 </AppPage>
 
@@ -69,6 +74,7 @@ const joinedArtists = artists.join(", ");
   }
 
   .bg-color {
-    height: 200%;
+    height: 180%;
+    background-image: linear-gradient(to top, transparent, var(--bg-color));
   }
 </style>

@@ -1,6 +1,6 @@
 import { useStore } from "@/store";
 import {
-  useMusicPlayed,
+  musicPlayedStore,
   type MusicPlayedStore,
   type MusicPlayed,
   currentSongTime,
@@ -26,7 +26,7 @@ const NextIcon = () => (
 );
 
 export default function MediaPlayer() {
-  const musicStore = useStore(useMusicPlayed);
+  const musicStore = useStore(musicPlayedStore);
   const volumeSignal = createSignal<VolumeData>({
     value: 0.1,
     mute: false,

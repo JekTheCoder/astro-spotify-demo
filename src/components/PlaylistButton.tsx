@@ -1,6 +1,6 @@
-import { Show } from "solid-js";
+import { Show, createEffect } from "solid-js";
 import { Play, Pause } from "./solid-buttons";
-import { setPlaylist, useMusicPlayed } from "@/store/played";
+import { musicPlayedStore } from "@/store/played";
 import { useStore } from "@/store";
 
 export type Props = {
@@ -8,20 +8,21 @@ export type Props = {
 };
 
 export default function PlaylistButton({ playlistId }: Props) {
-  const musicStore = useStore(useMusicPlayed);
+  const musicStore = useStore(musicPlayedStore);
+
+  createEffect(() => {
+    console.log("musicStore", musicStore());
+  });
+
   const isPlaying = () => {
     const { data } = musicStore();
     if (!data) return false;
 
+    console.log("iam", data);
     return data.playlist.id === playlistId && data.isPlaying;
   };
 
-  const toggle = (event: MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-		setPlaylist(playlistId);
-  };
+  const toggle = () => musicStore().setPlaylistId(playlistId);
 
   return (
     <button

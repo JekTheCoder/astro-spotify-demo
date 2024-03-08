@@ -15,6 +15,8 @@ export type MusicPlayedStore = {
   }) => void;
   stepSong: (step: number) => void;
   reset: () => void;
+  setPlaylistId: (playlistId: string) => void;
+  pause: () => void;
 };
 
 export type MusicPlayed = {
@@ -26,7 +28,7 @@ export type MusicPlayed = {
   songs: Song[];
 };
 
-export const useMusicPlayed = create<MusicPlayedStore>((set) => {
+export const musicPlayedStore = create<MusicPlayedStore>()((set, get) => {
   return {
     data: null,
     toggle: () =>
@@ -46,6 +48,26 @@ export const useMusicPlayed = create<MusicPlayedStore>((set) => {
           ...data,
           isPlaying: true,
         },
+      }),
+
+    setPlaylistId: (playlistId) => {
+      if (get().data?.playlist.id === playlistId) {
+        get().toggle();
+        return;
+      }
+
+      playlistQueue.setPlaylist(playlistId);
+    },
+
+    pause: () =>
+      set((state) => {
+        if (!state.data) return {};
+        return {
+          data: {
+            ...state.data,
+            isPlaying: false,
+          },
+        };
       }),
 
     reset: () => set({ data: null }),
@@ -70,7 +92,7 @@ export const useMusicPlayed = create<MusicPlayedStore>((set) => {
 });
 
 export function reset() {
-  useMusicPlayed.getState().reset();
+  musicPlayedStore.getState().reset();
   currentSongTime.getState().reset();
 }
 
@@ -111,7 +133,7 @@ class ChangePlaylistQueue {
           return;
         }
 
-        useMusicPlayed.getState().setPlaylist({
+        musicPlayedStore.getState().setPlaylist({
           playlist,
           musicId: song.id,
           albumId: song.albumId,
@@ -125,9 +147,6 @@ class ChangePlaylistQueue {
 }
 
 const playlistQueue = new ChangePlaylistQueue();
-export function setPlaylist(playlistId: string) {
-  playlistQueue.setPlaylist(playlistId);
-}
 
 function timeout(fn: () => void, ms: number, signal: AbortSignal) {
   const callback = () => {
