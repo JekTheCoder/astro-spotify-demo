@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 export type SongTimeStore = {
   time: number | null;
@@ -6,8 +7,15 @@ export type SongTimeStore = {
   update: (time: number) => void;
 };
 
-export const currentSongTime = create<SongTimeStore>((set) => ({
-  time: null,
-  reset: () => set({ time: null }),
-  update: (time: number) => set({ time }),
-}));
+export const currentSongTime = create<SongTimeStore>()(
+  persist(
+    (set) => ({
+      time: null,
+      reset: () => set({ time: null }),
+      update: (time: number) => set({ time }),
+    }),
+    {
+      name: "current-song-time",
+    },
+  ),
+);

@@ -1,6 +1,7 @@
 import { type Song, type Playlist } from "@/lib/data";
 import { create } from "zustand";
 import { currentSongTime } from "./time";
+import { persist } from "zustand/middleware";
 export * from "./time";
 
 export type MusicPlayedStore = {
@@ -28,68 +29,75 @@ export type MusicPlayed = {
   songs: Song[];
 };
 
-export const musicPlayedStore = create<MusicPlayedStore>()((set, get) => {
-  return {
-    data: null,
-    toggle: () =>
-      set((state) => {
-        if (!state.data)
-          return {
-            data: null,
-          };
+export const musicPlayedStore = create<MusicPlayedStore>()(
+  persist(
+    (set, get) => {
+      return {
+        data: null,
+        toggle: () =>
+          set((state) => {
+            if (!state.data)
+              return {
+                data: null,
+              };
 
-        return {
-          data: { ...state.data, isPlaying: !state.data.isPlaying },
-        };
-      }),
-    setPlaylist: (data) =>
-      set({
-        data: {
-          ...data,
-          isPlaying: true,
+            return {
+              data: { ...state.data, isPlaying: !state.data.isPlaying },
+            };
+          }),
+        setPlaylist: (data) =>
+          set({
+            data: {
+              ...data,
+              isPlaying: true,
+            },
+          }),
+
+        setPlaylistId: (playlistId) => {
+          if (get().data?.playlist.id === playlistId) {
+            get().toggle();
+            return;
+          }
+
+          playlistQueue.setPlaylist(playlistId);
         },
-      }),
 
-    setPlaylistId: (playlistId) => {
-      if (get().data?.playlist.id === playlistId) {
-        get().toggle();
-        return;
-      }
+        pause: () =>
+          set((state) => {
+            if (!state.data) return {};
+            return {
+              data: {
+                ...state.data,
+                isPlaying: false,
+              },
+            };
+          }),
 
-      playlistQueue.setPlaylist(playlistId);
+        reset: () => set({ data: null }),
+
+        stepSong: (step: number) =>
+          set((state) => {
+            if (!state.data) return {};
+            const song = stepSong(state.data.musicId, step, state.data.songs);
+            if (!song) return {};
+
+            currentSongTime.getState().update(0);
+
+            return {
+              data: {
+                ...state.data,
+                musicId: song.id,
+                song,
+              },
+            };
+          }),
+      };
     },
-
-    pause: () =>
-      set((state) => {
-        if (!state.data) return {};
-        return {
-          data: {
-            ...state.data,
-            isPlaying: false,
-          },
-        };
-      }),
-
-    reset: () => set({ data: null }),
-
-    stepSong: (step: number) =>
-      set((state) => {
-        if (!state.data) return {};
-        const song = stepSong(state.data.musicId, step, state.data.songs);
-        if (!song) return {};
-
-        currentSongTime.getState().update(0);
-
-        return {
-          data: {
-            ...state.data,
-            musicId: song.id,
-            song,
-          },
-        };
-      }),
-  };
-});
+    {
+      name: "music-played",
+    },
+  ),
+);
 
 export function reset() {
   musicPlayedStore.getState().reset();
