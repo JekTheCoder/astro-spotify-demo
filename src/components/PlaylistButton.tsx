@@ -1,4 +1,4 @@
-import { Show, createEffect } from "solid-js";
+import { Show } from "solid-js";
 import { Play, Pause } from "./solid-buttons";
 import { musicPlayedStore } from "@/store/played";
 import { useStore } from "@/store";
@@ -10,15 +10,10 @@ export type Props = {
 export default function PlaylistButton({ playlistId }: Props) {
   const musicStore = useStore(musicPlayedStore);
 
-  createEffect(() => {
-    console.log("musicStore", musicStore());
-  });
-
   const isPlaying = () => {
     const { data } = musicStore();
     if (!data) return false;
 
-    console.log("iam", data);
     return data.playlist.id === playlistId && data.isPlaying;
   };
 
