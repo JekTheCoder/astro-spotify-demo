@@ -4,6 +4,7 @@ import { Play } from "./solid-buttons";
 
 export type Props = {
   index: number;
+	playlistId: string;
   id: number;
   title: string;
   image: string;
@@ -15,6 +16,7 @@ export type Props = {
 export default function PlaylistSongRow({
   index,
   id,
+	playlistId,
   image,
   title,
   artists,
@@ -31,14 +33,14 @@ export default function PlaylistSongRow({
     const { data } = music();
     if (!data) return false;
 
-    return data.song.id === id;
+    return data.song.id === id && data.playlist.id === playlistId;
   };
 
   const tdHoverClass = "group-hover:bg-glass";
   const tdActiveClass = "bg-glass-dark";
   const tdBgClass = () => (active() ? tdActiveClass : tdHoverClass);
 
-  const play = () => music().playSong(id);
+  const play = () => music().playSong(playlistId, id);
   return (
     <tr
       class="group"

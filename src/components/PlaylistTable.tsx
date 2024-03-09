@@ -19,10 +19,11 @@ function Time({ class: klass }: { class?: string }) {
 }
 
 export type Props = {
+	playlistId: string;
   songs: Song[];
 };
 
-export default function PlaylistTable({ songs }: Props) {
+export default function PlaylistTable({ songs, playlistId }: Props) {
   return (
     <table class="w-full border-collapse border-spacing-0 text-[#a7a7a7] font-normal text-left relative z-20">
       <thead class="">
@@ -46,7 +47,7 @@ export default function PlaylistTable({ songs }: Props) {
 
       <tbody>
         {songs.map((song, i) => (
-          <PlaylistSongRow {...song} index={i} />
+          <PlaylistSongRow {...song} playlistId={playlistId} index={i} />
         ))}
       </tbody>
     </table>

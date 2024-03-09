@@ -3,7 +3,6 @@ import { allPlaylists, songs } from "@/lib/data";
 import AppPage from "../../layouts/AppPage.astro";
 import { Image } from "astro:assets";
 import PlaylistButton from "@/components/PlaylistButton";
-import PlaylistSongRow from "@/components/PlaylistSongRow.tsx";
 import PlaylistTable from "@/components/PlaylistTable.tsx";
 
 const { id } = Astro.params;
@@ -67,7 +66,7 @@ const joinedArtists = artists.join(", ");
         <PlaylistButton client:load playlistId={playlist.id} />
       </div>
 
-      <PlaylistTable client:load songs={playlistSongs} />
+      <PlaylistTable client:load songs={playlistSongs} playlistId={playlist.id} />
     </section>
   </main>
 </AppPage>

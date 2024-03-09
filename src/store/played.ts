@@ -18,7 +18,7 @@ export type MusicPlayedStore = {
   reset: () => void;
   setPlaylistId: (playlistId: string) => void;
   pause: () => void;
-  playSong: (songId: number) => void;
+  playSong: (playlistId: string, songId: number) => void;
 };
 
 export type MusicPlayed = {
@@ -60,7 +60,7 @@ export const musicPlayedStore = createStore<MusicPlayedStore>()(
             return;
           }
 
-          playlistQueue.setPlaylist(playlistId);
+          playlistQueue.setPlaylist(playlistId, (_, songs) => songs[0]);
         },
 
         pause: () =>
@@ -94,7 +94,13 @@ export const musicPlayedStore = createStore<MusicPlayedStore>()(
             };
           }),
 
-        playSong: (songId) =>
+        playSong: (playlistId, songId) => {
+          if (playlistId !== get().data?.playlist.id) {
+            playlistQueue.setPlaylist(playlistId, (_, songs) =>
+              songs.find((s) => s.id === songId),
+            );
+          }
+
           set((state) => {
             const { data } = state;
             if (!data) return {};
@@ -108,7 +114,8 @@ export const musicPlayedStore = createStore<MusicPlayedStore>()(
             return {
               data: { ...data, isPlaying: true, song, musicId: songId },
             };
-          }),
+          });
+        },
       };
     },
     {
@@ -132,11 +139,13 @@ function stepSong(
   return songs.at(nextIndex);
 }
 
+type SongSelect = (playlist: Playlist, songs: Song[]) => Song | undefined;
+
 class ChangePlaylistQueue {
   private abort?: AbortController;
   private resetAbort?: AbortController;
 
-  setPlaylist(playlistId: string) {
+  setPlaylist(playlistId: string, select: SongSelect) {
     this.abort?.abort();
     this.resetAbort?.abort();
 
@@ -150,7 +159,7 @@ class ChangePlaylistQueue {
     })
       .then((res) => res.json())
       .then(({ playlist, songs }: { playlist: Playlist; songs: Song[] }) => {
-        const song = songs[0];
+        const song = select(playlist, songs);
 
         this.resetAbort?.abort();
 
