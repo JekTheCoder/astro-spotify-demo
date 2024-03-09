@@ -38,13 +38,19 @@ export default function PlaylistSongRow({
   const tdActiveClass = "bg-glass-dark";
   const tdBgClass = () => (active() ? tdActiveClass : tdHoverClass);
 
+  const play = () => music().playSong(id);
   return (
-    <tr class="group">
+    <tr
+      class="group"
+      onDblClick={play}
+      onKeyUp={(e) => e.code === "Enter" && play()}
+      tabindex={0}
+    >
       <td class={`${tdClass} ${tdBgClass()}`}>
         <div class="w-6 flex justify-end">
           <p class="group-hover:hidden pr-2">{index + 1}</p>
 
-					<Play class="hidden group-hover:block w-6 h-6 text-white" />
+          <Play class="hidden group-hover:block w-6 h-6 text-white" />
         </div>
       </td>
 

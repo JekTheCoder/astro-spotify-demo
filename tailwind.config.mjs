@@ -6,7 +6,7 @@ export default {
 			colors: {
 				glass: {
 					DEFAULT: 'hsla(0, 0%, 100%, 0.1)',
-					dark: 'hsla(0, 0%, 0%, 0.3)',
+					dark: 'hsla(0, 0%, 100%, 0.3)',
 				}
 			}
 		},

@@ -1,5 +1,5 @@
 import { type Song, type Playlist } from "@/lib/data";
-import { create } from "zustand";
+import { createStore } from "zustand/vanilla";
 import { currentSongTimeStore } from "./time";
 import { persist } from "zustand/middleware";
 export * from "./time";
@@ -18,6 +18,7 @@ export type MusicPlayedStore = {
   reset: () => void;
   setPlaylistId: (playlistId: string) => void;
   pause: () => void;
+  playSong: (songId: number) => void;
 };
 
 export type MusicPlayed = {
@@ -29,7 +30,7 @@ export type MusicPlayed = {
   songs: Song[];
 };
 
-export const musicPlayedStore = create<MusicPlayedStore>()(
+export const musicPlayedStore = createStore<MusicPlayedStore>()(
   persist(
     (set, get) => {
       return {
@@ -86,9 +87,26 @@ export const musicPlayedStore = create<MusicPlayedStore>()(
             return {
               data: {
                 ...state.data,
+                isPlaying: true,
                 musicId: song.id,
                 song,
               },
+            };
+          }),
+
+        playSong: (songId) =>
+          set((state) => {
+            const { data } = state;
+            if (!data) return {};
+
+            const song = data.songs.find((song) => song.id === songId);
+            if (!song) return {};
+
+            if (data.song.id === songId) {
+            }
+
+            return {
+              data: { ...data, isPlaying: true, song, musicId: songId },
             };
           }),
       };

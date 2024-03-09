@@ -1,7 +1,7 @@
 import { createSignal, onMount } from "solid-js";
-import type { StoreApi, UseBoundStore } from "zustand";
+import type { StoreApi, Mutate } from "zustand/vanilla";
 
-export function useStore<S>(store: UseBoundStore<StoreApi<S>>) {
+export function useStore<S>(store: Mutate<StoreApi<S>, any>) {
   const [state, setState] = createSignal(store.getInitialState());
 
   onMount(() => {

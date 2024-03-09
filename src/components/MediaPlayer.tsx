@@ -26,7 +26,7 @@ const NextIcon = () => (
 );
 
 export default function MediaPlayer() {
-  const musicStore = useStore(musicPlayedStore);
+  const music = useStore(musicPlayedStore);
   const volumeSignal = createSignal<VolumeData>({
     value: 0.1,
     mute: false,
@@ -43,24 +43,24 @@ export default function MediaPlayer() {
 		audio.currentTime = currentSongTime().time ?? 0;
 	});
 
-  const disabled = () => musicStore().data === null;
-  const playing = () => Boolean(musicStore().data?.isPlaying);
-  const song = () => musicStore().data?.song;
+  const disabled = () => music().data === null;
+  const playing = () => Boolean(music().data?.isPlaying);
+  const song = () => music().data?.song;
 
-  const toggle = () => musicStore().toggle();
-  const stepSong = (step: number) => musicStore().stepSong(step);
+  const toggle = () => music().toggle();
+  const stepSong = (step: number) => music().stepSong(step);
 
   const setCurrentTime = (time: number) => {
     audio.currentTime = time;
   };
 
   createEffect<MusicPlayedStore>((prev) => {
-    const { data } = musicStore();
+    const { data } = music();
 
     musicEffect(prev?.data, data, audio);
 
-    return musicStore();
-  }, musicStore());
+    return music();
+  }, music());
 
   createEffect(() => {
     const [volume] = volumeSignal;
