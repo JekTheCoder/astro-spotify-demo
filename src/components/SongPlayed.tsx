@@ -28,7 +28,7 @@ export default function SongPlayed({ song }: Props) {
 
       <div class="flex flex-col justify-end">
         <p class="font-semibold truncate">{song().title}</p>
-        <p class="text-sm text-zinc-400 truncate">{joinedArtists()}</p>
+        <p class="text-sm text-soft truncate">{joinedArtists()}</p>
       </div>
     </div>
   );

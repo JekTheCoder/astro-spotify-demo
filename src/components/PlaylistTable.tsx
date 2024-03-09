@@ -25,7 +25,7 @@ export type Props = {
 
 export default function PlaylistTable({ songs, playlistId }: Props) {
   return (
-    <table class="w-full border-collapse border-spacing-0 text-[#a7a7a7] font-normal text-left relative z-20">
+    <table class="w-full border-collapse border-spacing-0 text-soft font-normal text-left relative z-20">
       <thead class="">
         <tr>
           <th class="text-center pb-4 px-0">

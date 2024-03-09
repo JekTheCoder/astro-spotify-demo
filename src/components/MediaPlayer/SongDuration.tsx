@@ -34,7 +34,7 @@ export default function SongDuration({ onTimeChange }: Props) {
 
   return (
     <div
-      class={`grid grid-cols-[auto_1fr_auto] gap-x-4 items-center ${disabled() ? "text-gray-500" : "text-white"}`}
+      class={`grid grid-cols-[auto_1fr_auto] gap-x-4 items-center ${disabled() ? "text-soft" : "text-white"}`}
     >
       <span class="w-10">{timeFormatted()}</span>
 

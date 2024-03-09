@@ -79,7 +79,7 @@ export default function MediaPlayer() {
 
   return (
     <div
-      class={`px-4 py-2 grid grid-cols-3 gap-x-6 items-center ${disabled() ? "text-gray-500" : "text-white"}`}
+      class={`px-4 py-2 grid grid-cols-3 gap-x-6 items-center ${disabled() ? "text-soft" : "text-white"}`}
     >
       <div class="h-16 justify-self-start">
         <Show when={song()}>{(song) => <SongPlayed song={song} />}</Show>
@@ -89,7 +89,7 @@ export default function MediaPlayer() {
         <div class="flex gap-x-6 justify-center">
           <button
             disabled={disabled()}
-            class="-scale-x-100"
+            class="-scale-x-100 disabled:bg-text-500"
             onClick={() => stepSong(-1)}
           >
             <NextIcon />
@@ -105,7 +105,11 @@ export default function MediaPlayer() {
             </Show>
           </button>
 
-          <button disabled={disabled()} onClick={() => stepSong(1)}>
+          <button
+            disabled={disabled()}
+            class="disabled:bg-text-500"
+            onClick={() => stepSong(1)}
+          >
             <NextIcon />
           </button>
         </div>
