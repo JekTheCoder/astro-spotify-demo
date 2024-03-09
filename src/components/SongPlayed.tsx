@@ -14,8 +14,8 @@ export default function SongPlayed({ song }: Props) {
   const joinedArtists = () => song().artists.join(", ");
 
   return (
-    <div class="flex gap-x-4">
-      <picture class="h-16 w-16 aspect-square">
+    <div class="grid grid-cols-[4rem_minmax(0,1fr)] gap-x-4">
+      <picture class="aspect-square">
         <img
           class="object-cover w-full h-full rounded-md"
           src={song().image}
@@ -27,8 +27,8 @@ export default function SongPlayed({ song }: Props) {
       </picture>
 
       <div class="flex flex-col justify-end">
-        <p class="text-lg font-semibold">{song().title}</p>
-        <p class="text-sm text-zinc-400">{joinedArtists()}</p>
+        <p class="font-semibold truncate">{song().title}</p>
+        <p class="text-sm text-zinc-400 truncate">{joinedArtists()}</p>
       </div>
     </div>
   );

@@ -36,7 +36,7 @@ export default function MediaPlayer() {
   const onTimeUpdate = () => currentSongTime().update(audio.currentTime);
 
   const audio = (
-    <audio src="" onTimeUpdate={onTimeUpdate}></audio>
+    <audio onTimeUpdate={onTimeUpdate}></audio>
   ) as HTMLAudioElement;
 
 	onMount(() => {
@@ -70,7 +70,7 @@ export default function MediaPlayer() {
 
   return (
     <div
-      class={`px-4 py-2 grid grid-cols-3 items-center ${disabled() ? "text-gray-500" : "text-white"}`}
+      class={`px-4 py-2 grid grid-cols-3 gap-x-6 items-center ${disabled() ? "text-gray-500" : "text-white"}`}
     >
       <div class="h-16 justify-self-start">
         <Show when={song()}>{(song) => <SongPlayed song={song} />}</Show>
