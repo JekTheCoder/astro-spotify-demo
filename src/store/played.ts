@@ -1,6 +1,6 @@
 import { type Song, type Playlist } from "@/lib/data";
 import { create } from "zustand";
-import { currentSongTime } from "./time";
+import { currentSongTimeStore } from "./time";
 import { persist } from "zustand/middleware";
 export * from "./time";
 
@@ -81,7 +81,7 @@ export const musicPlayedStore = create<MusicPlayedStore>()(
             const song = stepSong(state.data.musicId, step, state.data.songs);
             if (!song) return {};
 
-            currentSongTime.getState().update(0);
+            currentSongTimeStore.getState().update(0);
 
             return {
               data: {
@@ -101,7 +101,7 @@ export const musicPlayedStore = create<MusicPlayedStore>()(
 
 export function reset() {
   musicPlayedStore.getState().reset();
-  currentSongTime.getState().reset();
+  currentSongTimeStore.getState().reset();
 }
 
 function stepSong(
@@ -149,7 +149,7 @@ class ChangePlaylistQueue {
           songs,
         });
 
-        currentSongTime.getState().update(0);
+        currentSongTimeStore.getState().update(0);
       });
   }
 }

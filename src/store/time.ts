@@ -7,7 +7,7 @@ export type SongTimeStore = {
   update: (time: number) => void;
 };
 
-export const currentSongTime = create<SongTimeStore>()(
+export const currentSongTimeStore = create<SongTimeStore>()(
   persist(
     (set) => ({
       time: null,

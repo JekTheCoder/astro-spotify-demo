@@ -3,9 +3,9 @@ import {
   musicPlayedStore,
   type MusicPlayedStore,
   type MusicPlayed,
-  currentSongTime,
+  currentSongTimeStore,
 } from "@/store/played";
-import { Show, createEffect, createSignal } from "solid-js";
+import { Show, createEffect, createSignal, onMount } from "solid-js";
 import { Pause, Play } from "./solid-buttons";
 import Volume, { type VolumeData } from "./MediaPlayer/Volume";
 import SongPlayed from "./SongPlayed";
@@ -31,13 +31,17 @@ export default function MediaPlayer() {
     value: 0.1,
     mute: false,
   });
-  const currentSongTimeStore = useStore(currentSongTime);
+  const currentSongTime = useStore(currentSongTimeStore);
 
-  const onTimeUpdate = () => currentSongTimeStore().update(audio.currentTime);
+  const onTimeUpdate = () => currentSongTime().update(audio.currentTime);
 
   const audio = (
     <audio src="" onTimeUpdate={onTimeUpdate}></audio>
   ) as HTMLAudioElement;
+
+	onMount(() => {
+		audio.currentTime = currentSongTime().time ?? 0;
+	});
 
   const disabled = () => musicStore().data === null;
   const playing = () => Boolean(musicStore().data?.isPlaying);

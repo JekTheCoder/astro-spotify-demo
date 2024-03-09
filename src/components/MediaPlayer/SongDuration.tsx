@@ -1,5 +1,5 @@
 import { useStore } from "@/store";
-import { currentSongTime, musicPlayedStore } from "@/store/played";
+import { currentSongTimeStore, musicPlayedStore } from "@/store/played";
 import { Slider } from "../Slider";
 import { type Setter } from "solid-js";
 
@@ -9,7 +9,7 @@ type Props = {
 
 export default function SongDuration({ onTimeChange }: Props) {
   const musicStore = useStore(musicPlayedStore);
-  const timeStore = useStore(currentSongTime);
+  const timeStore = useStore(currentSongTimeStore);
 
   const invalidDuration = "00:00";
 
