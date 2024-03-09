@@ -68,11 +68,13 @@ const joinedArtists = artists.join(", ");
       </div>
 
       <table class="w-full text-[#a7a7a7] font-normal text-left relative z-20">
-        <thead class="border-b border-glass">
+        <thead class="">
           <tr>
             <th class="text-center"><p class="pr-2">#</p></th>
-            <th>Artist</th>
-            <th>Album</th>
+            <th>
+              <p>Artist</p>
+            </th>
+            <th><p>Album</p></th>
             <th>
               <div class="flex justify-center">
                 <Time />
@@ -142,7 +144,11 @@ const joinedArtists = artists.join(", ");
   }
 
   th {
-    @apply pb-2;
+    @apply pb-4;
+  }
+
+  th > * {
+    @apply border-b border-glass pb-3;
   }
 
   td:first-child,
