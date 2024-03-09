@@ -3,6 +3,8 @@ import { allPlaylists, songs } from "@/lib/data";
 import AppPage from "../../layouts/AppPage.astro";
 import { Image } from "astro:assets";
 import PlaylistButton from "@/components/PlaylistButton";
+import Play from "@/icons/Play.astro";
+import Time from "@/icons/Time.astro";
 
 const { id } = Astro.params;
 const playlist = allPlaylists.find((playlist) => playlist.id === id);
@@ -61,9 +63,58 @@ const joinedArtists = artists.join(", ");
     </header>
 
     <section class="bg-zinc-900 p-4">
-      <div class="text-black relative z-10">
+      <div class="text-black relative z-10 mb-8">
         <PlaylistButton client:load playlistId={playlist.id} />
       </div>
+
+      <table class="w-full text-[#a7a7a7] font-normal text-left relative z-20">
+        <thead class="border-b border-glass">
+          <tr>
+            <th class="text-center"><p class="pr-2">#</p></th>
+            <th>Artist</th>
+            <th>Album</th>
+            <th>
+              <div class="flex justify-center">
+                <Time />
+              </div>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {
+            playlistSongs.map((song, i) => (
+              <tr class="group">
+                <td>
+                  <div class="w-6 flex justify-end">
+                    <p class="group-hover:hidden pr-2">{i + 1}</p>
+
+                    <Play class="hidden text-white group-hover:block w-6 h-6" />
+                  </div>
+                </td>
+                <td>
+                  <div class="grid grid-cols-[auto_1fr] gap-x-4">
+                    <picture class="aspect-square h-10">
+                      <img
+                        class="w-full h-full rounded-md"
+                        src={song.image}
+                        alt=""
+                      />
+                    </picture>
+
+                    <div class="flex flex-col">
+                      <span class="text-white font-bold">{song.title}</span>
+                      <span>{song.artists.join(",")}</span>
+                    </div>
+                  </div>
+                </td>
+                <td>{song.album}</td>
+                <td class="text-center">{song.duration}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
     </section>
   </main>
 </AppPage>
@@ -76,5 +127,37 @@ const joinedArtists = artists.join(", ");
   .bg-color {
     height: 180%;
     background-image: linear-gradient(to top, transparent, var(--bg-color));
+  }
+
+  td {
+    @apply truncate py-2 group-hover:bg-glass;
+  }
+
+  td:first-child {
+    @apply rounded-tl-lg rounded-bl-lg;
+  }
+
+  td:last-child {
+    @apply rounded-tr-lg rounded-br-lg pr-4;
+  }
+
+  th {
+    @apply pb-2;
+  }
+
+  td:first-child,
+  th:first-child {
+    @apply pl-4;
+  }
+
+  td:last-child,
+  th:last-child {
+    @apply pr-4;
+  }
+
+  td,
+  th {
+    font-size: 16px;
+    line-height: normal;
   }
 </style>
