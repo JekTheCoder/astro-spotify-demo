@@ -39,9 +39,9 @@ export default function MediaPlayer() {
     <audio onTimeUpdate={onTimeUpdate}></audio>
   ) as HTMLAudioElement;
 
-	onMount(() => {
-		audio.currentTime = currentSongTime().time ?? 0;
-	});
+  onMount(() => {
+    audio.currentTime = currentSongTime().time ?? 0;
+  });
 
   const disabled = () => music().data === null;
   const playing = () => Boolean(music().data?.isPlaying);
@@ -61,6 +61,15 @@ export default function MediaPlayer() {
 
     return music();
   }, music());
+
+  createEffect(() =>
+    musicPlayedStore.subscribe(({ data }) => {
+      if (!data) return;
+
+      if (data.isPlaying) audio.play();
+      else audio.pause();
+    }),
+  );
 
   createEffect(() => {
     const [volume] = volumeSignal;
@@ -123,13 +132,10 @@ function musicEffect(
     return;
   }
 
-  const { musicId, albumId, isPlaying } = data;
+  const { musicId, albumId } = data;
 
   if (!prev || musicId !== prev.musicId || albumId !== prev.albumId) {
     const musicIdStr = musicId.toString().padStart(2, "0");
     audio.src = `/music/${albumId}/${musicIdStr}.mp3`;
   }
-
-  if (isPlaying) audio.play();
-  else audio.pause();
 }
