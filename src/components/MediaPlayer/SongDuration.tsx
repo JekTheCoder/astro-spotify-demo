@@ -11,7 +11,7 @@ export default function SongDuration({ onTimeChange }: Props) {
   const musicStore = useStore(musicPlayedStore);
   const timeStore = useStore(currentSongTimeStore);
 
-  const invalidDuration = "00:00";
+  const invalidDuration = "0:00";
 
   const disabled = () => musicStore().data === null;
   const timeFormatted = () => {
